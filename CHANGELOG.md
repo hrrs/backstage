@@ -8,6 +8,10 @@ If you encounter issues while upgrading to a newer version, don't hesitate to re
 
 > Collect changes for the next release below
 
+### @backstage/auth-backend
+
+- The default mount path of backend plugins was changed to `/api/:pluginId`, and as part of that it was needed to enable configuration of the base path of the auth backend, so that it can construct redirect URLs correctly. The default base path is `/api/auth`, but you need to set this to `/auth` if you want to keep using the old path. Note that you will also need to reconfigure any allowed redirect URLs to include `/api` if you switch to the new recommended pattern. [#2562](https://github.com/spotify/backstage/pull/2562)
+
 ## v0.1.1-alpha.22
 
 ### @backstage/core
