@@ -15,4 +15,5 @@
  */
 
 export type { RouteRef, RouteRefConfig, ConcreteRoute } from './types';
+export type { MutableRouteRef } from './RouteRef';
 export { createRouteRef } from './RouteRef';
