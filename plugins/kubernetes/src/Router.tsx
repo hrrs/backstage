@@ -15,30 +15,33 @@
  */
 
 import React from 'react';
-import { Routes, Route } from 'react-router';
 import { Entity } from '@backstage/catalog-model';
+import { Route, Routes } from 'react-router-dom';
+
+import { rootCatalogKubernetesRouteRef } from './plugin';
+import { KubernetesContent } from './components/KubernetesContent';
 import { WarningPanel } from '@backstage/core';
-import { catalogRouteRef } from '../routes';
-import { ROLLBAR_ANNOTATION } from '../constants';
-import { EntityPageRollbar } from './EntityPageRollbar/EntityPageRollbar';
 
-export const isPluginApplicableToEntity = (entity: Entity) =>
-  Boolean(entity.metadata.annotations?.[ROLLBAR_ANNOTATION]);
+const KUBERNETES_ANNOTATION = 'backstage.io/kubernetes';
 
-type Props = {
-  entity: Entity;
-};
+export const Router = ({ entity }: { entity: Entity }) => {
+  const kubernetesAnnotationValue =
+    entity.metadata.annotations?.[KUBERNETES_ANNOTATION];
 
-export const Router = ({ entity }: Props) =>
-  !isPluginApplicableToEntity(entity) ? (
-    <WarningPanel title="Rollbar plugin:">
-      <pre>{ROLLBAR_ANNOTATION}</pre> annotation is missing on the entity.
-    </WarningPanel>
-  ) : (
+  if (!kubernetesAnnotationValue) {
+    return (
+      <WarningPanel title="Kubernetes plugin:">
+        <pre>{KUBERNETES_ANNOTATION}</pre> annotation is missing on the entity.
+      </WarningPanel>
+    );
+  }
+
+  return (
     <Routes>
       <Route
-        path={`/${catalogRouteRef.path}`}
-        element={<EntityPageRollbar entity={entity} />}
+        path={`/${rootCatalogKubernetesRouteRef.path}`}
+        element={<KubernetesContent entity={entity} />}
       />
     </Routes>
   );
+};
